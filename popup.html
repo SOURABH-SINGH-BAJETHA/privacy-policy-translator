@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Privacy Analyzer</title>
+  <style>
+    /* Overall styling for the extension */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f7f9fc;
+      color: #2c3e50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 420px; /* Updated width for a more balanced layout */
+      height: 600px; /* Updated height */
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Title styling */
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #34495e;
+      text-align: center;
+    }
+
+    /* Content box styling */
+    #content {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #34495e;
+      background-color: #ffffff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 380px;
+      margin-bottom: 20px;
+      overflow-y: auto;
+      max-height: 300px; /* Adjusted height for the content box */
+      border: 1px solid #e0e0e0;
+    }
+
+    /* Button styling */
+    button {
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      color: #ffffff;
+    }
+
+    /* Hover and active effects */
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* Primary action button */
+    #analyze-button {
+      background-color: #3498db;
+      margin-bottom: 15px; /* Spacing below the analyze button */
+    }
+
+    #analyze-button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Proceed button styling */
+    #proceed-button {
+      background-color: #2ecc71;
+      flex: 1; /* Make buttons expand evenly */
+      margin-right: 10px; /* Space between the buttons */
+    }
+
+    #proceed-button:hover {
+      background-color: #27ae60;
+    }
+
+    /* Go Home button styling */
+    #go-home-button {
+      background-color: #e74c3c;
+      flex: 1; /* Make buttons expand evenly */
+    }
+
+    #go-home-button:hover {
+      background-color: #c0392b;
+    }
+
+    /* Container for action buttons */
+    #button-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 380px;
+      gap: 10px; /* Space between the buttons */
+    }
+
+    /* Bullet points styling */
+    ul {
+      padding-left: 20px;
+      margin-top: 10px;
+      list-style-type: disc;
+    }
+
+    ul li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+      color: #34495e;
+    }
+
+    strong {
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <h2>Privacy Analyzer</h2>
+  <div id="content">Click 'Analyze' to check the privacy policy.</div>
+  <button id="analyze-button">Analyze</button>
+  <div id="button-container" style="display: none;">
+    <button id="proceed-button">Proceed to Page</button>
+    <button id="go-home-button">Go to Chrome Home</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

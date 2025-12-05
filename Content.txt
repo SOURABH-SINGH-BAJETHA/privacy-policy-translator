@@ -1,0 +1,137 @@
+Overview
+This script is injected into web pages by the Chrome extension. It creates a pop-up modal that lets users analyze the privacy policies of websites. The script uses session storage, dynamic DOM manipulation, and a backend API call to achieve its functionality.
+
+Code Explanation
+
+function createPrivacyAnalyzerModal() {
+  if (sessionStorage.getItem("privacyAnalyzerShown")) {
+      return; // If the modal has been shown, do not display it again
+  }
+  sessionStorage.setItem("privacyAnalyzerShown", "true");
+
+function createPrivacyAnalyzerModal: This function creates the modal window for the privacy analyzer.
+sessionStorage.getItem: Checks if the modal has already been displayed in the current session.
+sessionStorage.setItem: Marks the modal as "shown" to prevent multiple displays on the same webpage.
+
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  overlay.style.zIndex = "10000";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+
+overlay: Creates a semi-transparent background layer that dims the screen when the modal is active.
+CSS Styles:
+position: fixed: Ensures the overlay covers the entire screen.
+backgroundColor: rgba(0, 0, 0, 0.5): Applies a translucent black background.
+zIndex: "10000": Keeps the overlay on top of other page elements.
+
+
+  const modal = document.createElement("div");
+  modal.style.backgroundColor = "#ffffff";
+  modal.style.borderRadius = "10px";
+  modal.style.padding = "20px";
+  modal.style.width = "80%";
+  modal.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.2)";
+  modal.style.textAlign = "center";
+  modal.style.overflowY = "auto";
+  modal.style.maxHeight = "80vh";
+
+modal: Represents the main window for displaying privacy analysis results.
+CSS Styles:
+backgroundColor: #ffffff: Makes the modal white.
+maxHeight: 80vh: Limits modal height to 80% of the viewport.
+
+
+  const title = document.createElement("h2");
+  title.textContent = "Privacy Analyzer";
+  title.style.marginBottom = "10px";
+  title.style.fontSize = "1.5rem";
+  title.style.color = "#2c3e50";
+  modal.appendChild(title);
+title: Adds a title ("Privacy Analyzer") to the modal.
+CSS Styles:
+fontSize: "1.5rem": Makes the text slightly larger.
+color: "#2c3e50": Sets a dark blue color.
+
+
+  const analyzeButton = document.createElement("button");
+  analyzeButton.textContent = "Analyze";
+  analyzeButton.style.backgroundColor = "#3498db";
+  analyzeButton.style.color = "#fff";
+  analyzeButton.style.border = "none";
+  analyzeButton.style.padding = "10px 20px";
+  analyzeButton.style.borderRadius = "5px";
+  analyzeButton.style.cursor = "pointer";
+  analyzeButton.style.marginBottom = "15px";
+  analyzeButton.onclick = async () => {
+      contentBox.textContent = "Analyzing... Please wait.";
+analyzeButton: Creates the "Analyze" button for the modal.
+CSS Styles:
+backgroundColor: "#3498db": A light blue background.
+cursor: "pointer": Changes the cursor to indicate a clickable button.
+onclick: When clicked, triggers the backend analysis.
+
+
+
+      try {
+          const policyText = document.body.innerText; // Simplified policy text extraction
+          const response = await fetch("http://localhost:8000/analyze", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ policy_text: policyText }),
+          });
+
+          const data = await response.json();
+document.body.innerText: Captures all text on the current webpage to analyze.
+fetch: Sends a POST request to the backend Flask server (http://localhost:8000/analyze).
+Request Body: Sends the policy text as JSON ({ policy_text: policyText }).
+await response.json: Waits for the backend's JSON response.
+
+
+
+          if (data.error) {
+              contentBox.textContent = `Error: ${data.error}`;
+          } else {
+              const overallRating = data.final_rating.rating;
+              renderStarRating(starRatingContainer, overallRating);
+Error Handling:
+Displays an error message if something goes wrong.
+overallRating: Extracts the final rating from the backend's response.
+renderStarRating: Updates the star rating UI.
+
+
+
+const proceedButton = document.createElement("button");
+proceedButton.textContent = "Proceed to Website";
+proceedButton.onclick = () => { overlay.remove(); };
+proceedButton: A button that closes the modal and allows the user to return to the website.
+
+
+const googleButton = document.createElement("button");
+googleButton.textContent = "Go to Google Homepage";
+googleButton.onclick = () => { window.location.href = "https://www.google.com"; };
+googleButton: Redirects the user to Google if clicked.
+Helper Functions
+renderStarRating(container, rating)
+
+Dynamically creates star icons to represent the privacy rating.
+Uses conditional styling to fill stars based on the rating (e.g., half stars for decimals).
+getRatingColor(rating)
+
+Returns a color based on the rating:
+Green: Ratings 4-5.
+Yellow: Ratings 2-3.
+Red: Rating 1.
+Initialization
+
+
+createPrivacyAnalyzerModal();
+createPrivacyAnalyzerModal: Automatically runs the modal creation when the script is injected into a page.
+This script combines frontend UI creation and backend interaction to deliver a dynamic experience for analyzing privacy policies. Let me know if you want more details on specific parts!
